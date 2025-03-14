@@ -68,6 +68,7 @@ class Preprocessor:
         try:
             cols_to_drop = self.df.nunique()[self.df.nunique() == 1].index.tolist()
             self.df.drop(columns=cols_to_drop, inplace=True)
+            self.numeric_columns = self.df.select_dtypes(include=['number']).columns
             logging.info("Unnecessary columns dropped successfully.")
         except Exception as e:
             logging.error(f"Error dropping unnecessary columns: {e}")
@@ -91,7 +92,7 @@ class Preprocessor:
         try:
             numeric_columns = self.df.select_dtypes(include=['number']).columns
             self.df[numeric_columns] = self.scaler.fit_transform(self.df[numeric_columns])
-            logging.info("Feature standardization completed.")
+            logging.info(f"Feature standardization completed. ")
         except Exception as e:
             logging.error(f"Error standardizing features: {e}")
             raise
@@ -101,10 +102,10 @@ class Preprocessor:
             raise ValueError("Data not loaded.")
         logging.info("Removing outliers...")
         try:
-            numeric_columns = self.df.select_dtypes(include=['number']).columns
-            mask = (np.abs(self.df[numeric_columns]) < threshold).all(axis=1)
+            mask = (np.abs(self.df[self.numeric_columns]) < threshold).all(axis=1)
             self.df = self.df[mask]
-            logging.info("Outliers removed successfully.")
+            self.labels = self.labels[mask]
+            logging.info(f"Outliers removed successfully.")
         except Exception as e:
             logging.error(f"Error removing outliers: {e}")
             raise
@@ -116,7 +117,7 @@ class Preprocessor:
         try:
             svd = TruncatedSVD(n_components=n_components)
             self.df = pd.DataFrame(svd.fit_transform(self.df))
-            logging.info("SVD applied successfully.")
+            logging.info(f"SVD applied successfully.")
         except Exception as e:
             logging.error(f"Error applying SVD: {e}")
             raise
