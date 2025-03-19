@@ -12,74 +12,58 @@ from .utils.cond_loss import cond_loss
 from .utils.sample import sample
 from torch import optim
 import pickle
+import backend.config as config
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Paths
-DATA_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\data\raw\KDDTrain+.csv'
-MODEL_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\src\models\gan_generator.pth'
-TRANSFORMER_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\src\models\data_transformer.pkl'
-DISCRETE_COLUMNS = ['tcp', 'ftp_data', 'SF', 'normal']
-BATCH_SIZE = 500
-EPOCHS = 1
-LATENT_DIM = 128
-GEN_HIDDEN_LAYERS = (256, 256)
-DISC_HIDDEN_LAYERS = (256, 256)
-PAC = 10
-LR = 2e-4
-BETAS = (0.5, 0.9)
-WEIGHT_DECAY = 1e-6
-GRADIENT_PENALTY = 10
-DEVICE = 'cpu'
-
 # Load dataset
-logging.info("Loading dataset from %s", DATA_PATH)
-df = pd.read_csv(DATA_PATH)
+logging.info("Loading dataset from %s", config.DATA_PATH)
+df = pd.read_csv(config.DATA_PATH)
 logging.info("Dataset loaded successfully with shape: %s", df.shape)
 
 # Data transformation
 logging.info("Initializing DataTransformer and fitting dataset")
 transformer = DataTransformer()
-transformer.fit(df, DISCRETE_COLUMNS)
+transformer.fit(df, config.DISCRETE_COLUMNS)
 train_data = transformer.transform(df)
 logging.info("Data transformation completed.")
 
 # Save transformer
-with open(TRANSFORMER_PATH, 'wb') as f:
+with open(config.TRANSFORMER_PATH, 'wb') as f:
     pickle.dump(transformer, f)
 logging.info("Transformer saved successfully.")
 
 data_sampler = DataSampler(train_data, transformer.output_info_list, True)
 data_dim = transformer.output_dimensions
 
-generator = Generator(LATENT_DIM + data_sampler.dim_cond_vec(), GEN_HIDDEN_LAYERS, data_dim)
-discriminator = Discriminator(data_dim + data_sampler.dim_cond_vec(), DISC_HIDDEN_LAYERS, pac=PAC)
+generator = Generator(config.LATENT_DIM + data_sampler.dim_cond_vec(), config.GEN_HIDDEN_LAYERS, data_dim)
+discriminator = Discriminator(data_dim + data_sampler.dim_cond_vec(), config.DISC_HIDDEN_LAYERS, pac=config.PAC)
 
-optimizerG = optim.Adam(generator.parameters(), lr=LR, betas=BETAS, weight_decay=WEIGHT_DECAY)
-optimizerD = optim.Adam(discriminator.parameters(), lr=LR, betas=BETAS, weight_decay=WEIGHT_DECAY)
+optimizerG = optim.Adam(generator.parameters(), lr=config.LR, betas=config.BETAS, weight_decay=config.WEIGHT_DECAY)
+optimizerD = optim.Adam(discriminator.parameters(), lr=config.LR, betas=config.BETAS, weight_decay=config.WEIGHT_DECAY)
 
-mean = torch.zeros(BATCH_SIZE, LATENT_DIM, device=DEVICE)
+mean = torch.zeros(config.BATCH_SIZE, config.LATENT_DIM, device=config.DEVICE)
 std = mean + 1
 loss_values = pd.DataFrame(columns=['Epoch', 'Generator Loss', 'Discriminator Loss'])
-steps_per_epoch = max(len(train_data) // BATCH_SIZE, 1)
+steps_per_epoch = max(len(train_data) // config.BATCH_SIZE, 1)
 
-logging.info("Starting training with %d epochs and batch size %d", EPOCHS, BATCH_SIZE)
-epoch_iterator = tqdm(range(EPOCHS), desc="Gen. (0.00) | Discrim. (0.00)")
+logging.info("Starting training with %d epochs and batch size %d", config.EPOCHS, config.BATCH_SIZE)
+epoch_iterator = tqdm(range(config.EPOCHS), desc="Gen. (0.00) | Discrim. (0.00)")
 for epoch in epoch_iterator:
     try:
-        logging.info("Epoch %d/%d started", epoch + 1, EPOCHS)
+        logging.info("Epoch %d/%d started", epoch + 1, config.EPOCHS)
         for step in range(steps_per_epoch):
             for _ in range(2):
                 fakez = torch.normal(mean=mean, std=std)
-                condvec = data_sampler.sample_condvec(BATCH_SIZE)
+                condvec = data_sampler.sample_condvec(config.BATCH_SIZE)
                 if condvec is None:
-                    real = data_sampler.sample_data(train_data, BATCH_SIZE, None, None)
+                    real = data_sampler.sample_data(train_data, config.BATCH_SIZE, None, None)
                     c1, c2 = None, None
                 else:
                     c1, m1, col, opt = map(torch.from_numpy, condvec)
                     fakez = torch.cat([fakez, c1], dim=1)
-                    perm = np.random.permutation(BATCH_SIZE)
-                    real = data_sampler.sample_data(train_data, BATCH_SIZE, col[perm], opt[perm])
+                    perm = np.random.permutation(config.BATCH_SIZE)
+                    real = data_sampler.sample_data(train_data, config.BATCH_SIZE, col[perm], opt[perm])
                     c2 = c1[perm]
                 fake = generator(fakez)
                 fakeact = apply_activate(fake, transformer)
@@ -88,18 +72,18 @@ for epoch in epoch_iterator:
                 fake_cat = torch.cat([fakeact, c1], dim=1) if c1 is not None else fakeact
                 y_real = discriminator(real_cat)
                 y_fake = discriminator(fake_cat)
-                pen = discriminator.calc_gradient_penalty(real_cat, fake_cat, DEVICE, GRADIENT_PENALTY)
+                pen = discriminator.calc_gradient_penalty(real_cat, fake_cat, config.DEVICE, config.GRADIENT_PENALTY)
                 loss_d = -(torch.mean(y_real) - torch.mean(y_fake))
                 optimizerD.zero_grad(set_to_none=True)
                 (pen + loss_d).backward()
                 optimizerD.step()
             
             fakez = torch.normal(mean=mean, std=std)
-            condvec = data_sampler.sample_condvec(BATCH_SIZE)
+            condvec = data_sampler.sample_condvec(config.BATCH_SIZE)
             if condvec is None:
                 c1, m1 = None, None
             else:
-                c1, m1, _, _ = map(lambda x: torch.tensor(x, dtype=torch.float32, device=DEVICE), condvec)
+                c1, m1, _, _ = map(lambda x: torch.tensor(x, dtype=torch.float32, device=config.DEVICE), condvec)
                 fakez = torch.cat([fakez, c1], dim=1)
             fake = generator(fakez)
             fakeact = apply_activate(fake, transformer)
@@ -120,5 +104,5 @@ for epoch in epoch_iterator:
         raise
 
 logging.info("Training completed. Saving generator...")
-torch.save(generator.state_dict(), MODEL_PATH)
+torch.save(generator.state_dict(), config.MODEL_PATH)
 logging.info("Generator saved successfully.")
