@@ -5,20 +5,16 @@ import io
 import logging
 from src.IDS.training.predict import predict_new_data
 import os
+import backend.config as config
 
 ids_router = APIRouter()
 
-MODEL_SAVE_PATH = r"C:/Users/Vishruth V Srivatsa/OneDrive/Desktop/IDS/src/models"
-PREPROCESSOR_SAVE_PATH = os.path.join(MODEL_SAVE_PATH, "preprocessor.pkl")
-MAPPING_SAVE_PATH = os.path.join(MODEL_SAVE_PATH, "label_mapping.json")
-DEVICE = "cpu"
-
-@ids_router.post("/predict")
+@ids_router.post("/")
 async def predict(file: UploadFile = File(...)):
     try:
         contents = await file.read()
         new_df = pd.read_csv(io.StringIO(contents.decode("utf-8")))
-        predictions = predict_new_data(new_df,  MODEL_SAVE_PATH, PREPROCESSOR_SAVE_PATH, MAPPING_SAVE_PATH, DEVICE)
+        predictions = predict_new_data(new_df,  config.MODEL_SAVE_PATH, config.PREPROCESSOR_SAVE_PATH, config.MAPPING_SAVE_PATH, config.DEVICE)
         
         output_df = pd.DataFrame({"predictions": predictions})
         output = io.StringIO()

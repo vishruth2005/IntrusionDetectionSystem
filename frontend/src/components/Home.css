@@ -1,0 +1,48 @@
+/* Home Page Styling */
+.home-container {
+    text-align: center;
+    padding: 50px;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+  }
+  
+  /* Placards Container */
+  .placards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+  }
+  
+  /* Placard (Clickable Card) */
+  .placard {
+    width: 250px;
+    padding: 20px;
+    text-align: center;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    color: black;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  /* Placard Hover Effect */
+  .placard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Placard Title */
+  .placard h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+  
+  /* Placard Description */
+  .placard p {
+    font-size: 14px;
+    color: #555;
+  }
+  

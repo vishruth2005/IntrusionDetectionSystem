@@ -10,7 +10,7 @@ class GenerateInput(BaseModel):
     num_samples: int
     batch_size: int = 50
 
-@ctgan_router.post("/generate", response_class=Response)
+@ctgan_router.post("/", response_class=Response)
 async def generate(data: GenerateInput):
     try:
         generated_data = generate_samples(data.num_samples, data.batch_size)

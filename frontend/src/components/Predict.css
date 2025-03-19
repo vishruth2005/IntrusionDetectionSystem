@@ -1,0 +1,71 @@
+/* Predict Page Styling */
+.predict-container {
+    text-align: center;
+    padding: 40px;
+    background-color: #f4f4f4;
+    min-height: 100vh;
+  }
+  
+  /* File Upload Section */
+  .file-upload {
+    margin: 20px auto;
+    text-align: center;
+  }
+  
+  /* File Input */
+  input[type="file"] {
+    display: block;
+    margin: 10px auto;
+  }
+  
+  /* Selected File Name */
+  .file-name {
+    font-size: 14px;
+    color: #333;
+    margin-top: 5px;
+  }
+  
+  /* Predict Button */
+  button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #138496;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Error Message */
+  .error {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  /* Download Link */
+  .download-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+  }
+  
+  .download-link:hover {
+    background-color: #0056b3;
+  }
+  
