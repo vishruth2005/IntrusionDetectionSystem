@@ -11,10 +11,14 @@ from .utils.activate import apply_activate
 from .utils.cond_loss import cond_loss
 from .utils.sample import sample
 from torch import optim
+import pickle
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Paths
 DATA_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\data\raw\KDDTrain+.csv'
+MODEL_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\src\models\gan_generator.pth'
+TRANSFORMER_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\src\models\data_transformer.pkl'
 DISCRETE_COLUMNS = ['tcp', 'ftp_data', 'SF', 'normal']
 BATCH_SIZE = 500
 EPOCHS = 1
@@ -28,26 +32,25 @@ WEIGHT_DECAY = 1e-6
 GRADIENT_PENALTY = 10
 DEVICE = 'cpu'
 
-try:
-    logging.info("Loading dataset from %s", DATA_PATH)
-    df = pd.read_csv(DATA_PATH)
-    logging.info("Dataset loaded successfully with shape: %s", df.shape)
-except Exception as e:
-    logging.error("Failed to load dataset: %s", e)
-    raise
+# Load dataset
+logging.info("Loading dataset from %s", DATA_PATH)
+df = pd.read_csv(DATA_PATH)
+logging.info("Dataset loaded successfully with shape: %s", df.shape)
 
-try:
-    logging.info("Initializing DataTransformer and fitting dataset")
-    transformer = DataTransformer()
-    transformer.fit(df, DISCRETE_COLUMNS)
-    logging.info("Finished fitting data. Transforming...")
-    train_data = transformer.transform(df)
-    data_sampler = DataSampler(train_data, transformer.output_info_list, True)
-    data_dim = transformer.output_dimensions
-    logging.info("Data transformation completed. Data dimensions: %d", data_dim)
-except Exception as e:
-    logging.error("Error in data transformation: %s", e)
-    raise
+# Data transformation
+logging.info("Initializing DataTransformer and fitting dataset")
+transformer = DataTransformer()
+transformer.fit(df, DISCRETE_COLUMNS)
+train_data = transformer.transform(df)
+logging.info("Data transformation completed.")
+
+# Save transformer
+with open(TRANSFORMER_PATH, 'wb') as f:
+    pickle.dump(transformer, f)
+logging.info("Transformer saved successfully.")
+
+data_sampler = DataSampler(train_data, transformer.output_info_list, True)
+data_dim = transformer.output_dimensions
 
 generator = Generator(LATENT_DIM + data_sampler.dim_cond_vec(), GEN_HIDDEN_LAYERS, data_dim)
 discriminator = Discriminator(data_dim + data_sampler.dim_cond_vec(), DISC_HIDDEN_LAYERS, pac=PAC)
@@ -116,10 +119,6 @@ for epoch in epoch_iterator:
         logging.error("Error during training at epoch %d: %s", epoch, e)
         raise
 
-try:
-    logging.info("Generating synthetic samples...")
-    generated = sample(200, 50, LATENT_DIM, DEVICE, data_sampler, generator, transformer)
-    logging.info("Sample generation successful. First 5 rows:\n%s", generated.head())
-except Exception as e:
-    logging.error("Error during sample generation: %s", e)
-    raise
+logging.info("Training completed. Saving generator...")
+torch.save(generator.state_dict(), MODEL_PATH)
+logging.info("Generator saved successfully.")

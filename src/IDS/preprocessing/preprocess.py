@@ -115,8 +115,8 @@ class Preprocessor:
             raise ValueError("Data not loaded.")
         logging.info("Applying SVD...")
         try:
-            svd = TruncatedSVD(n_components=n_components)
-            self.df = pd.DataFrame(svd.fit_transform(self.df))
+            self.svd = TruncatedSVD(n_components=n_components)
+            self.df = pd.DataFrame(self.svd.fit_transform(self.df))
             logging.info(f"SVD applied successfully.")
         except Exception as e:
             logging.error(f"Error applying SVD: {e}")
@@ -146,6 +146,33 @@ class Preprocessor:
             self.remove_outliers()
             self.apply_svd(n_components)
             self.save_data()
+            logging.info("Data preprocessing pipeline completed successfully.")
+        except Exception as e:
+            logging.error(f"Error during preprocessing pipeline: {e}")
+            raise
+
+    def svd_trans(self, n_components: int = 37) -> None:
+        if self.df is None:
+            raise ValueError("Data not loaded.")
+        logging.info("Applying SVD...")
+        try:
+            self.df = pd.DataFrame(self.svd.transform(self.df))
+            logging.info(f"SVD applied successfully.")
+        except Exception as e:
+            logging.error(f"Error applying SVD: {e}")
+            raise
+
+    def transform(self, left_skewed: List[str], right_skewed: List[str], n_components: int = 37) -> None:
+        if self.df is None:
+            raise ValueError("Data not loaded.")
+        logging.info("Starting data preprocessing pipeline...")
+        try:
+            self.handle_missing_values()
+            self.normalize_data(left_skewed, right_skewed)
+            self.drop_unnecessary_columns()
+            self.encode_categorical_features()
+            self.standardize_features()
+            self.svd_trans(n_components)
             logging.info("Data preprocessing pipeline completed successfully.")
         except Exception as e:
             logging.error(f"Error during preprocessing pipeline: {e}")
