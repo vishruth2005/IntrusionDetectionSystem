@@ -47,9 +47,9 @@ def save_mapping(mapping, save_path):
 try:
     preprocessor = Preprocessor(config.OUTPUT_PATH)
     df = pd.read_csv(config.DATA_PATH)
-    preprocessor.load_data(df, 'normal')
+    preprocessor.load_train_data(df, 'normal')
     preprocessor.process(config.LEFT_SKEWED, config.RIGHT_SKEWED)
-    final_features, labels = preprocessor.df, preprocessor.labels
+    final_features, labels = preprocessor.train_df, preprocessor.train_labels
     logging.info(f"Data loaded and processed successfully. Shape: {final_features.shape}")
 except Exception as e:
     logging.error(f"Error in preprocessing: {e}")

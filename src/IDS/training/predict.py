@@ -70,9 +70,9 @@ def predict_new_data(new_df, model_save_path, preprocessor_save_path, mapping_sa
         # Load Label Mapping
         label_mapping = load_mapping(mapping_save_path)
 
-        preprocessor.load_data(new_df, 'normal')
+        preprocessor.load_test_data(new_df, 'normal')
         preprocessor.transform(LEFT_SKEWED, RIGHT_SKEWED)
-        features = torch.tensor(preprocessor.df.values, dtype=torch.float32).to(device)
+        features = torch.tensor(preprocessor.test_df.values, dtype=torch.float32).to(device)
         logging.info("New data loaded and preprocessed successfully.")
 
         # Load trained autoencoders
@@ -103,11 +103,11 @@ def predict_new_data(new_df, model_save_path, preprocessor_save_path, mapping_sa
         logging.error(f"Error in prediction process: {e}")
         raise
 
-if __name__ == "__main__":
-    new_data_path = r"C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\data\raw\KDDTrain+.csv"
-    new_df = pd.read_csv(new_data_path)
-    try:
-        predictions = predict_new_data(new_df, MODEL_SAVE_PATH, PREPROCESSOR_SAVE_PATH, MAPPING_SAVE_PATH, DEVICE)
-        print(predictions)
-    except Exception as e:
-        logging.error(f"Prediction failed: {e}")
+# if __name__ == "__main__":
+#     new_data_path = r"C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\data\raw\KDDTest+.csv"
+#     new_df = pd.read_csv(new_data_path)
+#     try:
+#         predictions = predict_new_data(new_df, MODEL_SAVE_PATH, PREPROCESSOR_SAVE_PATH, MAPPING_SAVE_PATH, DEVICE)
+#         print(predictions)
+#     except Exception as e:
+#         logging.error(f"Prediction failed: {e}")
