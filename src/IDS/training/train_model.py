@@ -47,7 +47,7 @@ def save_mapping(mapping, save_path):
 try:
     preprocessor = Preprocessor(config.OUTPUT_PATH)
     df = pd.read_csv(config.DATA_PATH)
-    preprocessor.load_train_data(df, 'normal')
+    preprocessor.load_train_data(df, 'attack_cat')
     preprocessor.process(config.LEFT_SKEWED, config.RIGHT_SKEWED)
     final_features, labels = preprocessor.train_df, preprocessor.train_labels
     logging.info(f"Data loaded and processed successfully. Shape: {final_features.shape}")
@@ -82,7 +82,7 @@ def create_dataset(cae, loader, device):
     return DataLoader(TensorDataset(torch.cat(features_list), torch.cat(labels_list)), batch_size=config.IDS_BATCH_SIZE, shuffle=True)
 
 # Initialize and train autoencoders
-CAE_LAYERS = [(37, 80), (80, 40), (40, 20)]
+CAE_LAYERS = [(37, 128), (128, 72), (72, 30)]
 autoencoders = [ContractiveAutoEncoder(in_dim, out_dim) for in_dim, out_dim in CAE_LAYERS]
 
 try:
@@ -98,7 +98,7 @@ except Exception as e:
     raise
 
 try:
-    scae_gc = SCAE_GC(37, *trained_autoencoders, 20, 20)
+    scae_gc = SCAE_GC(37, *trained_autoencoders, 30, 10)
     trained_model = train_scae_gc_model(scae_gc, train_loader, config.EPOCHS, config.LEARNING_RATE, config.DEVICE)
     logging.info("SCAE-GC model trained successfully.")
 except Exception as e:

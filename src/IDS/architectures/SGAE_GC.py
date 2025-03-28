@@ -9,7 +9,7 @@ class SCAE_GC(nn.Module):
         self.cae2 = cae2
         self.cae3 = cae3
         self.gated_conv = GatedConvolution(gc_input_dim, gc_output_dim)
-        self.classifier = nn.Linear(20, 12)
+        self.classifier = nn.Linear(20, 10)
 
     def forward(self, x):
         x, _ = self.cae1(x)

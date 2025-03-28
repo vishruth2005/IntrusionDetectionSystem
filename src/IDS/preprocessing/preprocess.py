@@ -154,22 +154,57 @@ class Preprocessor:
             logging.error(f"Error applying SVD: {e}")
             raise
 
+    # def process(self, left_skewed: List[str], right_skewed: List[str], n_components: int = 37) -> None:
+    #     if self.train_df is None:
+    #         raise ValueError("Training data not loaded.")
+    #     logging.info("Starting data preprocessing pipeline for training data...")
+    #     try:
+    #         self.train_df = self.handle_missing_values(self.train_df)
+    #         self.train_df = self.normalize_data(self.train_df, left_skewed, right_skewed)
+    #         self.train_df = self.drop_unnecessary_columns(self.train_df)
+    #         self.train_df = self.encode_categorical_features(self.train_df, train_mode=True)
+    #         self.train_df = self.standardize_features(self.train_df, train_mode=True)
+    #         self.train_df, self.train_labels = self.remove_outliers(self.train_df, self.train_labels)
+    #         self.train_df = self.apply_svd(self.train_df, train_mode=True, n_components=n_components)
+    #         logging.info("Data preprocessing pipeline completed successfully for training data.")
+    #     except Exception as e:
+    #         logging.error(f"Error during training preprocessing pipeline: {e}")
+    #         raise
     def process(self, left_skewed: List[str], right_skewed: List[str], n_components: int = 37) -> None:
         if self.train_df is None:
             raise ValueError("Training data not loaded.")
         logging.info("Starting data preprocessing pipeline for training data...")
         try:
+            # Handle missing values
             self.train_df = self.handle_missing_values(self.train_df)
-            self.train_df = self.normalize_data(self.train_df, left_skewed, right_skewed)
+
+            # Standard Normalization (Z-score normalization)
+            logging.info("Standardizing the data (Z-score normalization)...")
+            scaler = StandardScaler()
+            # Select only numerical columns for normalization
+            numeric_cols = self.train_df.select_dtypes(include=[float, int]).columns
+            self.train_df[numeric_cols] = scaler.fit_transform(self.train_df[numeric_cols])
+
+            # Drop unnecessary columns
             self.train_df = self.drop_unnecessary_columns(self.train_df)
+
+            # Encode categorical features
             self.train_df = self.encode_categorical_features(self.train_df, train_mode=True)
+
+            # Standardize features again if needed (if you're doing feature scaling separately)
             self.train_df = self.standardize_features(self.train_df, train_mode=True)
+
+            # Remove outliers
             self.train_df, self.train_labels = self.remove_outliers(self.train_df, self.train_labels)
+
+            # Apply SVD (dimensionality reduction)
             self.train_df = self.apply_svd(self.train_df, train_mode=True, n_components=n_components)
+
             logging.info("Data preprocessing pipeline completed successfully for training data.")
         except Exception as e:
             logging.error(f"Error during training preprocessing pipeline: {e}")
             raise
+
 
     def transform(self, left_skewed: List[str], right_skewed: List[str], n_components: int = 37) -> None:
         if self.test_df is None:
