@@ -1,0 +1,14 @@
+{
+    "normal": 0,
+    "neptune": 1,
+    "warezclient": 2,
+    "portsweep": 3,
+    "smurf": 4,
+    "satan": 5,
+    "ipsweep": 6,
+    "nmap": 7,
+    "imap": 8,
+    "back": 9,
+    "multihop": 10,
+    "warezmaster": 11
+}
