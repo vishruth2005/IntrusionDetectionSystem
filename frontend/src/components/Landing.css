@@ -1,0 +1,114 @@
+body {
+    font-family: 'Arial', sans-serif; /* Use a clean sans-serif font */
+    margin: 0;
+    padding: 0;
+}
+
+.landing-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('../assets/image.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #e0e0e0; /* Light gray text for better contrast */
+    text-align: center;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Dark overlay for readability */
+}
+
+.content {
+    z-index: 1; /* Ensure content is above the overlay */
+    padding: 40px;
+    border-radius: 15px; /* More rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7); /* Deeper shadow for depth */
+}
+
+h1 {
+    font-size: 3.5rem; /* Larger heading */
+    margin-bottom: 20px;
+    color: #ffffff; /* White color for the main heading */
+    opacity: 0; /* Start hidden */
+    transform: translateY(-20px); /* Start slightly above */
+    animation: slide-in 0.8s forwards; /* Animation for sliding in */
+    animation-delay: 0.5s; /* Delay before the animation starts */
+}
+
+p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    opacity: 0; /* Start hidden */
+    transform: translateY(-20px); /* Start slightly above */
+    animation: slide-in 0.8s forwards; /* Animation for sliding in */
+    animation-delay: 1s; /* Delay before the animation starts */
+}
+
+.auth-buttons {
+    display: flex;
+    justify-content: center; /* Center the buttons */
+    gap: 20px; /* Space between buttons */
+    margin-top: 20px; /* Space above the buttons */
+}
+
+.login-button, .signup-button {
+    padding: 12px 25px; /* Adjust padding for a larger button */
+    font-size: 1.2rem; /* Adjust font size */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Add transform for hover */
+    opacity: 0; /* Start hidden */
+    transform: translateY(20px); /* Start slightly below */
+    animation: slide-in 0.8s forwards; /* Animation for sliding in */
+}
+
+/* Futuristic button styles */
+.login-button {
+    background: linear-gradient(90deg, #00c6ff, #0072ff); /* Blue gradient */
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 198, 255, 0.5), 0 0 20px rgba(0, 114, 255, 0.5); /* Neon glow */
+}
+
+.signup-button {
+    background: linear-gradient(90deg, #ff0080, #ff8c00); /* Pink to orange gradient */
+    color: white;
+    box-shadow: 0 0 10px rgba(255, 0, 128, 0.5), 0 0 20px rgba(255, 140, 0, 0.5); /* Neon glow */
+}
+
+.login-button:hover, .signup-button:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.login-button:hover {
+    background: linear-gradient(90deg, #00aaff, #0056b3); /* Darker blue gradient on hover */
+}
+
+.signup-button:hover {
+    background: linear-gradient(90deg, #ff0070, #e67e22); /* Darker pink to orange gradient on hover */
+}
+
+/* Animation Keyframes */
+@keyframes slide-in {
+    to {
+        opacity: 1; /* Fade in */
+        transform: translateY(0); /* Move to original position */
+    }
+}
+
+/* Add delays for buttons */
+.auth-buttons .login-button {
+    animation-delay: 1.5s; /* Delay for login button */
+}
+
+.auth-buttons .signup-button {
+    animation-delay: 1.7s; /* Delay for sign-up button */
+}
