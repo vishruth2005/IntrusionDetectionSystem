@@ -89,7 +89,11 @@ for epoch in epoch_iterator:
             fakeact = apply_activate(fake, transformer)
             y_fake = discriminator(torch.cat([fakeact, c1], dim=1) if c1 is not None else fakeact)
             cross_entropy = cond_loss(fake, c1, m1, transformer) if condvec is not None else 0
-            loss_g = -torch.mean(y_fake) + cross_entropy
+            
+            lambda_penalty = 10  # Adjust this hyperparameter as needed
+            neg_penalty = lambda_penalty * torch.sum(torch.relu(-fake))
+            loss_g = -torch.mean(y_fake) + cross_entropy + neg_penalty
+            
             optimizerG.zero_grad(set_to_none=True)
             loss_g.backward()
             optimizerG.step()
