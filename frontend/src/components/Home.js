@@ -1,10 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react"; // Import useAuth0
 import "./Home.css"; // Import CSS
 
 const Home = () => {
+  const { logout } = useAuth0(); // Destructure logout from useAuth0
+
   return (
     <div className="home-container">
+      <button className="logout-button" onClick={() => logout({ returnTo: window.location.origin })}>Logout</button> {/* Add logout functionality */}
       <h1>Intrusion Detection System</h1>
       <div className="placards">
         <Link to="/generate" className="placard">
