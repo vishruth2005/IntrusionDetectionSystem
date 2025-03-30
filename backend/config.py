@@ -1,8 +1,8 @@
 import os
 
-DATA_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\data\raw\KDDTrain+.csv'
-MODEL_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\src\models\gan_generator.pth'
-TRANSFORMER_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\src\models\data_transformer.pkl'
+DATA_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\backend\data\raw\KDDTrain+.csv'
+MODEL_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\backend\src\models\gan_generator.pth'
+TRANSFORMER_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\backend\src\models\data_transformer.pkl'
 DISCRETE_COLUMNS = ['tcp', 'ftp_data', 'SF', 'normal']
 BATCH_SIZE = 500
 EPOCHS = 1
@@ -16,8 +16,8 @@ WEIGHT_DECAY = 1e-6
 GRADIENT_PENALTY = 10
 DEVICE = 'cpu'
 
-OUTPUT_PATH = "C:/Users/Vishruth V Srivatsa/OneDrive/Desktop/IDS/src/IDS/output"
-MODEL_SAVE_PATH = "C:/Users/Vishruth V Srivatsa/OneDrive/Desktop/IDS/src/models"
+OUTPUT_PATH = r"C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\backend\src\IDS\output"
+MODEL_SAVE_PATH = r"C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\backend\src\models"
 MAPPING_SAVE_PATH = os.path.join(MODEL_SAVE_PATH, "label_mapping.json")
 PREPROCESSOR_SAVE_PATH = os.path.join(MODEL_SAVE_PATH, "preprocessor.pkl")
 IDS_BATCH_SIZE = 32

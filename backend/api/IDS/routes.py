@@ -5,7 +5,7 @@ import io
 import logging
 from src.IDS.training.predict import predict_new_data
 import os
-import backend.config as config
+import config
 
 ids_router = APIRouter()
 
