@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.api.IDS.routes import ids_router
-from backend.api.CTGAN.routes import ctgan_router
+from api.IDS.routes import ids_router
+from api.CTGAN.routes import ctgan_router
 
 app = FastAPI()
 

@@ -5,7 +5,7 @@ from ..architectures.generator import Generator
 import torch
 from .utils.sample import sample
 import pandas as pd
-import backend.config as config
+import config
 
 def generate_samples(num_samples: int, batch_size: int = 50):
     """Generates synthetic data using the trained GAN."""
