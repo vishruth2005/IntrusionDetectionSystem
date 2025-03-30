@@ -9,8 +9,8 @@ import Landing from "./components/Landing"; // Import the Landing component
 
 const App = () => (
   <Auth0Provider
-    domain="dev-kt2cho1vhzoc36ib.us.auth0.com" // Replace with your Auth0 domain
-    clientId="ZTeTqUk6y5kExOL1yGN7ZQBCYHnOzVPE" // Replace with your Auth0 client ID
+    domain={process.env.REACT_APP_AUTH0_DOMAIN} // Use environment variable for Auth0 domain
+    clientId={process.env.REACT_APP_AUTH0_CLIENT_ID} // Use environment variable for Auth0 client ID
     authorizationParams={{
       redirect_uri: window.location.origin // Use authorizationParams.redirect_uri instead of redirectUri
     }}
