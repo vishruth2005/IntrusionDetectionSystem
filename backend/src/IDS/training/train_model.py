@@ -11,7 +11,7 @@ from .train_SGAE_GC import train_scae_gc_model
 from .utils.datasets import CustomDataset, TensorDataset
 import json
 import pickle
-import backend.config as config
+import config
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 

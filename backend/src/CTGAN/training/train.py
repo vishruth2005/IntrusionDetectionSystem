@@ -12,7 +12,7 @@ from .utils.cond_loss import cond_loss
 from .utils.sample import sample
 from torch import optim
 import pickle
-import backend.config as config
+import config
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
