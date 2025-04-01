@@ -1,32 +1,29 @@
 /* Capture Page Styling */
 .capture-container {
-    background-image: url('../assets/image.jpg'); /* Add background image */
-    background-size: cover; /* Ensure the image covers the entire container */
-    background-position: center; /* Center the image */
-    text-align: center;
-    padding: 50px;
-    background-color: #f4f4f4;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  /* Coming Soon Message */
-  .capture-container p {
-    font-size: 18px;
-    color: #555;
-    margin-top: 10px;
-    font-style: italic;
-  }
-  
-  /* Logout Button */
-.logout-button {
-  margin-top: 20px; /* Add some space above the button */
+  background-image: url('../assets/image.jpg'); /* Add background image */
+  background-size: cover; /* Ensure the image covers the entire container */
+  background-position: center; /* Center the image */
+  text-align: center;
+  padding: 50px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Input Field */
+input {
+  margin-bottom: 20px; /* Add space below the input field */
+}
+
+/* Button Styling */
+.capture-button {
+  margin-top: 10px; /* Add some space above the button */
   padding: 12px 20px; /* Padding for the button */
   font-size: 18px; /* Font size */
-  background-color: #ff4d4d; /* Background color */
+  background-color: #28a745; /* Background color */
   color: white; /* Text color */
   border: none; /* No border */
   border-radius: 5px; /* Rounded corners */
@@ -34,6 +31,72 @@
   transition: background 0.3s ease; /* Transition for background color */
 }
 
-.logout-button:hover {
-  background-color: #ff1a1a; /* Darker shade on hover */
+.capture-button:hover {
+  background-color: #218838; /* Darker shade on hover */
+}
+
+/* Scrollable Table Container */
+.table-container {
+  margin-top: 20px; /* Space above the table */
+  width: 100%; /* Full width */
+  overflow-x: auto; /* Enable horizontal scrolling */
+}
+
+.scrollable-table {
+  min-width: 600px; /* Minimum width for the table */
+}
+
+/* CSV Table */
+.csv-table {
+  width: 100%; /* Full width */
+  border-collapse: collapse; /* Collapse borders */
+}
+
+.csv-table th, .csv-table td {
+  border: 1px solid #007bff; /* Border color */
+  padding: 8px; /* Padding for cells */
+  text-align: left; /* Align text to the left */
+  color: white; /* Change text color to white */
+}
+
+.csv-table th {
+  background-color: #0056b3; /* Darker blue for header */
+}
+
+.csv-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.1); /* Light background for even rows */
+}
+
+.csv-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Highlight on hover */
+}
+
+/* Button Loading State */
+.capture-button:disabled {
+  background-color: #ccc; /* Grey background when disabled */
+  cursor: not-allowed; /* Not allowed cursor */
+}
+
+/* Error Message */
+.error {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Download Button */
+.download-button {
+  margin-top: 20px; /* Space above the download button */
+  padding: 12px 20px; /* Padding for the button */
+  font-size: 18px; /* Font size */
+  background-color: #007bff; /* Background color */
+  color: white; /* Text color */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background 0.3s ease; /* Transition for background color */
+}
+
+.download-button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
 }

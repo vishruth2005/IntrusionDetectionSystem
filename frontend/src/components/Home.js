@@ -23,7 +23,7 @@ const Home = () => {
 
         <Link to="/capture" className="placard">
           <h2>Capture</h2>
-          <p>Capture real time data. (Coming Soon)</p>
+          <p>Capture real time data.</p>
         </Link>
       </div>
     </div>

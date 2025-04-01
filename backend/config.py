@@ -31,3 +31,6 @@ RIGHT_SKEWED = ['0', '491', '0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.
 LEFT_SKEWED = ['20', '150', '1.00']
 TYPES = ['normal', 'neptune', 'warezclient', 'portsweep', 'smurf', 
          'satan', 'ipsweep', 'nmap', 'imap', 'back', 'multihop', 'warezmaster']
+
+PCAP_SAVE_PATH = os.path.join(MODEL_SAVE_PATH, "capture.pcap")
+PCAP_OUTPUT_PATH = os.path.join(MODEL_SAVE_PATH, "output.arff") 

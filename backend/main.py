@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.IDS.routes import ids_router
 from api.CTGAN.routes import ctgan_router
+from api.Capture.routes import capture_router
 
 app = FastAPI()
 
@@ -19,3 +20,4 @@ async def root():
 
 app.include_router(ids_router, prefix='/predict', tags=['predict'])
 app.include_router(ctgan_router, prefix='/generate', tags=['generate'])
+app.include_router(capture_router, prefix='/capture', tags=['capture'])
