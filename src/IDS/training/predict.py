@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # # Constants
 RIGHT_SKEWED = ['0', '491', '0.1', '0.2', '0.3', '0.4', '0.5', '0.6', '0.7', '0.8', '0.9', '0.10', '0.11', '0.12', '0.13', '0.14', '0.15', '0.16', '0.18', '2', '2.1', '0.00', '0.00.1', '0.00.2']
 LEFT_SKEWED = ['20', '150', '1.00']
-MODEL_SAVE_PATH = r"C:/Users/Prahas/OneDrive/Desktop/ids2/src/models"
+MODEL_SAVE_PATH = r"C:/ids2/src/models"
 PREPROCESSOR_SAVE_PATH = os.path.join(MODEL_SAVE_PATH, "preprocessor.pkl")
 MAPPING_SAVE_PATH = os.path.join(MODEL_SAVE_PATH, "label_mapping.json")
 DEVICE = "cpu"
@@ -70,18 +70,18 @@ def predict_new_data(new_df, model_save_path, preprocessor_save_path, mapping_sa
         # Load Label Mapping
         label_mapping = load_mapping(mapping_save_path)
 
-        preprocessor.load_test_data(new_df, 'normal')
+        preprocessor.load_test_data(new_df, 'attack_cat')
         preprocessor.transform(LEFT_SKEWED, RIGHT_SKEWED)
         features = torch.tensor(preprocessor.test_df.values, dtype=torch.float32).to(device)
         logging.info("New data loaded and preprocessed successfully.")
 
         # Load trained autoencoders
-        cae1 = load_model(ContractiveAutoEncoder, os.path.join(model_save_path, "CAE1.pth"), device, 37, 80)
-        cae2 = load_model(ContractiveAutoEncoder, os.path.join(model_save_path, "CAE2.pth"), device, 80, 40)
-        cae3 = load_model(ContractiveAutoEncoder, os.path.join(model_save_path, "CAE3.pth"), device, 40, 20)
+        cae1 = load_model(ContractiveAutoEncoder, os.path.join(model_save_path, "CAE1.pth"), device, 37, 128)
+        cae2 = load_model(ContractiveAutoEncoder, os.path.join(model_save_path, "CAE2.pth"), device, 128, 72)
+        cae3 = load_model(ContractiveAutoEncoder, os.path.join(model_save_path, "CAE3.pth"), device, 72, 30)
 
         # Load SCAE-GC model
-        scae_gc = load_model(SCAE_GC, os.path.join(model_save_path, "SCAE_GC.pth"), device, 37, cae1, cae2, cae3, 20, 20)
+        scae_gc = load_model(SCAE_GC, os.path.join(model_save_path, "SCAE_GC.pth"), device, 37, cae1, cae2, cae3, 30, 10)
 
         # Get predictions
         with torch.no_grad():
@@ -104,7 +104,7 @@ def predict_new_data(new_df, model_save_path, preprocessor_save_path, mapping_sa
         raise
 
 if __name__ == "__main__":
-    new_data_path = r'C:\Users\raghu\OneDrive\Desktop\ids2\data\raw\UNSW_NB15_testing-set.csv'
+    new_data_path = r'C:\ids2\data\raw\UNSW_NB15_testing-set.csv'
     new_df = pd.read_csv(new_data_path)
     try:
         predictions = predict_new_data(new_df, MODEL_SAVE_PATH, PREPROCESSOR_SAVE_PATH, MAPPING_SAVE_PATH, DEVICE)

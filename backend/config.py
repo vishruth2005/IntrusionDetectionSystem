@@ -1,6 +1,6 @@
 import os
 
-DATA_PATH = r'C:\Users\raghu\OneDrive\Desktop\ids2\data\raw\UNSW_NB15_training-set.csv'
+DATA_PATH = r'C:\ids2\data\raw\UNSW_NB15_training-set.csv'
 MODEL_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\src\models\gan_generator.pth'
 TRANSFORMER_PATH = r'C:\Users\Vishruth V Srivatsa\OneDrive\Desktop\IDS\src\models\data_transformer.pkl'
 DISCRETE_COLUMNS = ['tcp', 'ftp_data', 'SF', 'normal']
@@ -16,8 +16,8 @@ WEIGHT_DECAY = 1e-6
 GRADIENT_PENALTY = 10
 DEVICE = 'cpu'
 
-OUTPUT_PATH = "C:/Users/raghu/OneDrive/Desktop/ids2/src/IDS/output"
-MODEL_SAVE_PATH = "C:/Users/raghu/OneDrive/Desktop/ids2/src/models"
+OUTPUT_PATH = "C:/ids2/src/IDS/output"
+MODEL_SAVE_PATH = "C:/ids2/src/models"
 MAPPING_SAVE_PATH = os.path.join(MODEL_SAVE_PATH, "label_mapping.json")
 PREPROCESSOR_SAVE_PATH = os.path.join(MODEL_SAVE_PATH, "preprocessor.pkl")
 IDS_BATCH_SIZE = 32
