@@ -98,7 +98,7 @@ except Exception as e:
     raise
 
 try:
-    scae_gc = SCAE_GC(37, *trained_autoencoders, 30, 10)
+    scae_gc = SCAE_GC(37, *trained_autoencoders, 30, 20)
     trained_model = train_scae_gc_model(scae_gc, train_loader, config.EPOCHS, config.LEARNING_RATE, config.DEVICE)
     logging.info("SCAE-GC model trained successfully.")
 except Exception as e:
@@ -110,3 +110,22 @@ model_names = ["CAE1", "CAE2", "CAE3", "SCAE_GC"]
 save_model_weights(model_list, model_names, config.MODEL_SAVE_PATH)
 save_preprocessor(preprocessor, config.PREPROCESSOR_SAVE_PATH)
 save_mapping(mapping, config.MAPPING_SAVE_PATH)
+from sklearn.metrics import accuracy_score
+
+def evaluate_accuracy(model, test_loader, device):
+    model.eval()
+    all_preds = []
+    all_labels = []
+
+    with torch.no_grad():
+        for features, labels in test_loader:
+            features, labels = features.to(device), labels.to(device)
+            outputs = model(features)
+            preds = torch.argmax(outputs, dim=1)
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+
+    acc = accuracy_score(all_labels, all_preds)
+    print(f"Test Accuracy: {acc * 100:.2f}%")
+    return acc
+evaluate_accuracy(trained_model, test_loader, config.DEVICE)

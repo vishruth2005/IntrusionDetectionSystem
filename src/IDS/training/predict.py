@@ -81,7 +81,7 @@ def predict_new_data(new_df, model_save_path, preprocessor_save_path, mapping_sa
         cae3 = load_model(ContractiveAutoEncoder, os.path.join(model_save_path, "CAE3.pth"), device, 72, 30)
 
         # Load SCAE-GC model
-        scae_gc = load_model(SCAE_GC, os.path.join(model_save_path, "SCAE_GC.pth"), device, 37, cae1, cae2, cae3, 30, 10)
+        scae_gc = load_model(SCAE_GC, os.path.join(model_save_path, "SCAE_GC.pth"), device, 37, cae1, cae2, cae3, 30, 20)
 
         # Get predictions
         with torch.no_grad():

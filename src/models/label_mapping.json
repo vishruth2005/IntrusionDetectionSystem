@@ -1,14 +1,12 @@
 {
-    "normal": 0,
-    "neptune": 1,
-    "warezclient": 2,
-    "portsweep": 3,
-    "smurf": 4,
-    "satan": 5,
-    "ipsweep": 6,
-    "nmap": 7,
-    "imap": 8,
-    "back": 9,
-    "multihop": 10,
-    "warezmaster": 11
+    "Fuzzers": 0,
+    "Analysis": 1,
+    "Backdoor": 2,
+    "DoS": 3,
+    "Exploits": 4,
+    "Generic": 5,
+    "Reconnaissance": 6,
+    "Shellcode": 7,
+    "Worms": 8,
+    "Normal": 9
 }
