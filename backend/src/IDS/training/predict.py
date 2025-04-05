@@ -70,8 +70,8 @@ def predict_new_data(new_df, model_save_path, preprocessor_save_path, mapping_sa
         # Load Label Mapping
         label_mapping = load_mapping(mapping_save_path)
 
-        preprocessor.load_test_data(new_df, 'normal')
-        preprocessor.transform(LEFT_SKEWED, RIGHT_SKEWED)
+        preprocessor.load_test_data(new_df, 'class')
+        preprocessor.transform()
         features = torch.tensor(preprocessor.test_df.values, dtype=torch.float32).to(device)
         logging.info("New data loaded and preprocessed successfully.")
 

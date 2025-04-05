@@ -5,6 +5,7 @@ import logging
 from typing import List, Optional
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import TruncatedSVD
+import config
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -18,7 +19,7 @@ class Preprocessor:
         self.test_labels: Optional[pd.Series] = None
         self.scaler = StandardScaler()
         self.dummy_columns: Optional[pd.Index] = None #Store dummy column names
-        self.numeric_columns: Optional[pd.Index] = None
+        self.numeric_columns: Optional[pd.Index] = config.NUMERIC #Store numeric column names
         self.svd = None
         logging.info("Preprocessor initialized.")
 
@@ -80,7 +81,6 @@ class Preprocessor:
         try:
             cols_to_drop = df.nunique()[df.nunique() == 1].index.tolist()
             df.drop(columns=cols_to_drop, inplace=True)
-            self.numeric_columns = df.select_dtypes(include=['number']).columns
             logging.info("Unnecessary columns dropped successfully.")
             return df
         except Exception as e:
@@ -154,14 +154,14 @@ class Preprocessor:
             logging.error(f"Error applying SVD: {e}")
             raise
 
-    def process(self, left_skewed: List[str], right_skewed: List[str], n_components: int = 37) -> None:
+    def process(self, n_components: int = 37) -> None:
         if self.train_df is None:
             raise ValueError("Training data not loaded.")
         logging.info("Starting data preprocessing pipeline for training data...")
         try:
             self.train_df = self.handle_missing_values(self.train_df)
-            self.train_df = self.normalize_data(self.train_df, left_skewed, right_skewed)
-            self.train_df = self.drop_unnecessary_columns(self.train_df)
+            # self.train_df = self.normalize_data(self.train_df, left_skewed, right_skewed)
+            # self.train_df = self.drop_unnecessary_columns(self.train_df)
             self.train_df = self.encode_categorical_features(self.train_df, train_mode=True)
             self.train_df = self.standardize_features(self.train_df, train_mode=True)
             self.train_df, self.train_labels = self.remove_outliers(self.train_df, self.train_labels)
@@ -171,14 +171,14 @@ class Preprocessor:
             logging.error(f"Error during training preprocessing pipeline: {e}")
             raise
 
-    def transform(self, left_skewed: List[str], right_skewed: List[str], n_components: int = 37) -> None:
+    def transform(self, n_components: int = 37) -> None:
         if self.test_df is None:
             raise ValueError("Test data not loaded.")
         logging.info("Starting data preprocessing pipeline for test data...")
         try:
             self.test_df = self.handle_missing_values(self.test_df)
-            self.test_df = self.normalize_data(self.test_df, left_skewed, right_skewed)
-            self.test_df = self.drop_unnecessary_columns(self.test_df)
+            # self.test_df = self.normalize_data(self.test_df, left_skewed, right_skewed)
+            # self.test_df = self.drop_unnecessary_columns(self.test_df)
             self.test_df = self.encode_categorical_features(self.test_df, train_mode=False)
             self.test_df = self.standardize_features(self.test_df, train_mode=False)
             self.test_df = self.apply_svd(self.test_df, train_mode=False, n_components=n_components)
