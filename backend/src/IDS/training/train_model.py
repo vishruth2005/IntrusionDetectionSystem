@@ -51,6 +51,7 @@ try:
     preprocessor.process()
     final_features, labels = preprocessor.train_df, preprocessor.train_labels
     logging.info(f"Data loaded and processed successfully. Shape: {final_features.shape}")
+    logging.info(f"Labels: {labels.unique()}")
 except Exception as e:
     logging.error(f"Error in preprocessing: {e}")
     raise
@@ -59,7 +60,7 @@ def map_types_to_numbers(series, types):
     type_to_number = {type_name: i for i, type_name in enumerate(types)}
     return series.map(type_to_number).values, type_to_number
 
-mapped_result, mapping = map_types_to_numbers(pd.Series(labels), config.TYPES)
+mapped_result, mapping = map_types_to_numbers(pd.Series(labels), labels.unique())
 
 dataset = CustomDataset(final_features, mapped_result)
 total_size = len(dataset)
