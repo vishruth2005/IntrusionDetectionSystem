@@ -43,7 +43,7 @@ starlette==0.46.1
 sympy==1.13.1
 termcolor==3.0.0
 threadpoolctl==3.6.0
-torch==2.5.1
+torch==2.6.0
 torchaudio==2.5.1
 torchvision==0.20.1
 tqdm==4.67.1
